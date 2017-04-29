@@ -5,10 +5,22 @@
 
 <div class="row marketing">
   <div class="col-sm-12">
-    <%= form_for @conn, recommendation_path(@conn, :create), [as: :recommendations], fn f-> %>
-      <%= text_input f, :loan_apr %>
-      <%= text_input f, :loan_monthly_payment %>
-      <%= text_input f, :loan_balance %>
+    <%= form_for @conn, recommendation_path(@conn, :create), [as: :recommendations, class: "form-inline"], fn f-> %>
+      <div class="form-group">
+        <%= label f, :loan_apr %>
+        <%= text_input f, :loan_apr, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+      <%= label f, :loan_monthly_payment %>
+      <%= text_input f, :loan_monthly_payment, class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+      <%= label f, :loan_balance %>
+      <%= text_input f, :loan_balance, class: "form-control" %>
+      </div>
+
       <%= submit "Recommend" %>
     <% end %>
   </div>
