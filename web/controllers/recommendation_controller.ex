@@ -14,6 +14,7 @@ defmodule DefeatTheLoan.RecommendationController do
 
     recommendations = Allocator.perform(loans, budget)
 
+    IO.inspect(recommendations)
     IO.inspect List.last(recommendations)[:total_paid]
     IO.puts "vs"
     IO.inspect coulda_paid

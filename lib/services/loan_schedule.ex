@@ -35,33 +35,43 @@ defmodule LoanSchedule do
   end
 
   def calculate(apr, monthly_payment, balance, payments, schedule_map) do
-    monthly_interest_payment = ((apr / 12) * balance)
-    monthly_principal_payment = monthly_payment - monthly_interest_payment
+    %{interest: interest_payment, principal: principal_payment} = current_payments(apr, balance, monthly_payment)
 
-    if monthly_principal_payment < 0 do
-      raise "You can't pay this loan. Your minimum payment must be higher than #{monthly_interest_payment.(apr, balance)}"
+    if principal_payment < 0 do
+      raise "You can't pay this loan. Your minimum payment must be higher than #{interest_payment}"
     end
 
-    if monthly_principal_payment == 0 do
+    if principal_payment == 0 do
       raise "You are paying just below the minimum payment"
     end
 
     current_payment_period = payments + 1
-    next_month_balance = balance - monthly_principal_payment
+    next_month_balance = balance - principal_payment
     total_paid = current_payment_period * monthly_payment
+    # ^^ is this right?
 
     current_period = [
       apr: apr,
       current_balance: next_month_balance,
       total_paid: total_paid,
-      principal_payment: monthly_principal_payment,
-      interest_payment: monthly_interest_payment,
+      principal_payment: principal_payment,
+      interest_payment: interest_payment,
       current_payment_period: current_payment_period,
       monthly_payment: monthly_payment
     ]
     new_payment_schedule = Map.put(schedule_map, current_payment_period, current_period)
 
     calculate(apr, monthly_payment, next_month_balance, current_payment_period, new_payment_schedule)
+  end
+
+  def current_payments(apr, balance, monthly_payment) do
+    monthly_interest_payment = ((apr / 12) * balance)
+    monthly_principal_payment = monthly_payment - monthly_interest_payment
+
+    %{
+      interest: monthly_interest_payment,
+      principal: monthly_principal_payment
+    }
   end
 end
 
