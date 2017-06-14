@@ -48,7 +48,6 @@ defmodule LoanSchedule do
     current_payment_period = payments + 1
     next_month_balance = balance - principal_payment
     total_paid = current_payment_period * monthly_payment
-    # ^^ is this right?
 
     current_period = [
       apr: apr,
