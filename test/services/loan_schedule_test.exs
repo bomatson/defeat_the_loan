@@ -36,9 +36,9 @@ defmodule DefeatTheLoan.LoanScheduleTest do
       balance = 100
       monthly_payment = 10
 
-      payment_schedule = LoanSchedule.calculate(apr, monthly_payment, balance, 0, %{})
+      {:ok , payment_schedule, _} = LoanSchedule.calculate(apr, monthly_payment, balance, 0, %{})
       expected_first_payment = %MonthlyPayment{
-        apr: 0.12,
+        apr: apr,
         current_balance: 91.0,
         interest_payment: 1.0,
         monthly_payment: 10,
@@ -53,9 +53,9 @@ defmodule DefeatTheLoan.LoanScheduleTest do
       balance = 100
       monthly_payment = 10
 
-      payment_schedule = LoanSchedule.calculate(apr, monthly_payment, balance, 0, %{})
+      {:ok, payment_schedule, _} = LoanSchedule.calculate(apr, monthly_payment, balance, 0, %{})
       expected_fifth_payment = %MonthlyPayment{
-        apr: 0.12,
+        apr: apr,
         current_balance: 54.09095491000001,
         interest_payment: 0.63456391,
         monthly_payment: 10,
@@ -70,13 +70,14 @@ defmodule DefeatTheLoan.LoanScheduleTest do
       balance = 100
       monthly_payment = 10
 
-      payment_schedule = LoanSchedule.calculate(apr, monthly_payment, balance, 0, %{})
+      {:ok, payment_schedule, _} = LoanSchedule.calculate(apr, monthly_payment, balance, 0, %{})
       expected_final_payment = %MonthlyPayment{
         current_balance: 0,
         interest_payment: 0.058400871299159544,
         monthly_payment: 5.898488001215114,
         principal_payment: 5.840087129915954,
         total_paid: 105.89848800121511,
+        apr: apr,
       }
       assert Map.get(payment_schedule, 11) == expected_final_payment
     end
