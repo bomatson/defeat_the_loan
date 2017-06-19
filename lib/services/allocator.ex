@@ -9,6 +9,8 @@ defmodule Allocator do
   end
 
   defp allocate(rec, budget, acc) do
+
+
     if(rec[:recommendation][:reallocate]) do
       recommendation = rec[:recommendation]
       allocation_order = rec[:allocation_order] + 1
@@ -23,13 +25,13 @@ defmodule Allocator do
       end)
 
       total_paid =
-        Enum.map(remaining_loans, fn(loan) -> loan[:total_paid] end)
+        Enum.map(remaining_loans, fn(loan) -> loan.total_paid end)
         |> Enum.sum
 
-      leftover = Enum.filter(remaining_loans, fn(loan) -> loan[:current_balance] > 0 end)
+      leftover = Enum.filter(remaining_loans, fn(loan) -> loan.current_balance > 0 end)
 
       new_allocation = Enum.map(leftover, fn(loan) ->
-        LoanSchedule.perform(loan[:apr], loan[:monthly_payment], loan[:current_balance])
+        LoanSchedule.perform(loan.apr, loan.monthly_payment, loan.current_balance)
       end)
 
       new_rec = [
